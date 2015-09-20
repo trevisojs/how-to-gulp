@@ -29,8 +29,12 @@ gulp.task('watch', function() {
     gulp.watch('_assets/js/**/*.js', ['scripts']);
 });
 
+gulp.task('build', ['styles', 'scripts'], function() {
+    console.log('build assets')
+});
 
-gulp.task('serve', ['styles'], function() {
+
+gulp.task('serve', ['build'], function() {
 
     browserSync.init({
         server: "./web"
