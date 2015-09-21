@@ -1,7 +1,7 @@
 How to Gulp
 ========================================
 
-Questo è un repository per capire e testare le funzionalità di [Gulp]:http://gulpjs.com/.
+Questo è un repository per capire e testare le funzionalità di [Gulp].
 
 ## Gulp Tasks
 
@@ -25,3 +25,5 @@ Non appena che le dipendenze sono state installate potete usare il task 'gulp' p
 
     gulp
     
+-------------------
+[Gulp]:http://gulpjs.com/
