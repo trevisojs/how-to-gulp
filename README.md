@@ -1,7 +1,7 @@
 How to Gulp
 ========================================
 
-Questo è un repository per capire e testare le funzionalità di Gulp.
+Questo è un repository per capire e testare le funzionalità di [Gulp][Gulp]:http://gulpjs.com/.
 
 ## Gulp Tasks
 
