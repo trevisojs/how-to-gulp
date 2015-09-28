@@ -2,7 +2,8 @@ How to Gulp
 ========================================
 
 Questo è un repository per capire e testare le funzionalità di [Gulp].
-Leggi il [tutorial] per maggiori informazioni:
+
+Leggi il [tutorial] per maggiori informazioni.
 
 ## Gulp Tasks
 
