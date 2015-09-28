@@ -2,6 +2,7 @@ How to Gulp
 ========================================
 
 Questo è un repository per capire e testare le funzionalità di [Gulp].
+Leggi il [tutorial] per maggiori informazioni:
 
 ## Gulp Tasks
 
@@ -27,3 +28,4 @@ Non appena che le dipendenze sono state installate potete usare il task 'gulp' p
     
 -------------------
 [Gulp]:http://gulpjs.com/
+[tutorial]:https://medium.com/@nicholasruggeri/how-to-gulp-7829775242b4
