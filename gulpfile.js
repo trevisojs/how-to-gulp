@@ -1,7 +1,7 @@
 /*==========================================================
 How to Gulp
 Author: @trevisojs       - https://github.com/trevisojs
-Author: @ruggerinicholas - http://ruggeri.io
+Author: @nicholasruggeri - http://ruggeri.io
 ==========================================================*/
 
 
