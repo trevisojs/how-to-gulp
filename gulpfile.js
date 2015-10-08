@@ -16,6 +16,8 @@ var concat      = require('gulp-concat');
 var uglify      = require('gulp-uglify');
 var plumber     = require('gulp-plumber');
 var notify      = require("gulp-notify");
+var imagemin    = require('gulp-imagemin');
+var pngquant    = require('imagemin-pngquant');
 var browserSync = require('browser-sync').create();
 
 
@@ -28,14 +30,14 @@ var browserSync = require('browser-sync').create();
 *
 **/
 gulp.task('styles', function() {
-  gulp.src('_assets/scss/*.scss')
-    .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
-    .pipe(sourcemaps.init())
-    .pipe(sass({outputStyle: 'compressed'}))
-    .pipe(prefix())
-    .pipe(sourcemaps.write())
-    .pipe(gulp.dest('web/css'))
-    .pipe(browserSync.stream());
+    gulp.src('_assets/scss/*.scss')
+        .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
+        .pipe(sourcemaps.init())
+        .pipe(sass({outputStyle: 'compressed'}))
+        .pipe(prefix())
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('web/css'))
+        .pipe(browserSync.stream());
 });
 
 
@@ -48,12 +50,29 @@ gulp.task('styles', function() {
 *
 **/
 gulp.task('scripts', function() {
-  gulp.src('_assets/js/**/*.js')
-    .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
-    .pipe(concat('scripts.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('web/js'))
-    .pipe(browserSync.stream());
+    gulp.src('_assets/js/**/*.js')
+        .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
+        .pipe(concat('scripts.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('web/js'))
+        .pipe(browserSync.stream());
+});
+
+
+/**
+*
+* Images
+* - Image optimization
+*
+**/
+gulp.task('images', function () {
+    gulp.src('_assets/img/**/*')
+        .pipe(imagemin({
+            progressive: true,
+            svgoPlugins: [{removeViewBox: false}],
+            use: [pngquant()]
+        }))
+        .pipe(gulp.dest('web/img'));
 });
 
 
@@ -67,6 +86,7 @@ gulp.task('scripts', function() {
 gulp.task('watch', function() {
     gulp.watch('_assets/scss/**/*.scss', ['styles']);
     gulp.watch('_assets/js/**/*.js', ['scripts']);
+    gulp.watch('_assets/img/**/*', ['images']);
 });
 
 
@@ -77,7 +97,7 @@ gulp.task('watch', function() {
 * - scripts
 *
 **/
-gulp.task('build', ['styles', 'scripts'], function() {
+gulp.task('build', ['styles', 'scripts', 'images'], function() {
     console.log('build assets')
 });
 
@@ -95,6 +115,7 @@ gulp.task('serve', ['build'], function() {
     });
     gulp.watch('_assets/scss/**/*.scss', ['styles']);
     gulp.watch('_assets/js/**/*.js', ['scripts']);
+    gulp.watch('_assets/img/**/*', ['images']);
     gulp.watch("web/*.html").on('change', browserSync.reload);
 });
 
