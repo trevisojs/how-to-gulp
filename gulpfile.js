@@ -18,6 +18,7 @@ var plumber     = require('gulp-plumber');
 var notify      = require("gulp-notify");
 var imagemin    = require('gulp-imagemin');
 var pngquant    = require('imagemin-pngquant');
+var del         = require('del');
 var browserSync = require('browser-sync').create();
 
 
@@ -30,6 +31,7 @@ var browserSync = require('browser-sync').create();
 *
 **/
 gulp.task('styles', function() {
+    del('web/css');
     gulp.src('_assets/scss/*.scss')
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(sourcemaps.init())
@@ -50,6 +52,7 @@ gulp.task('styles', function() {
 *
 **/
 gulp.task('scripts', function() {
+    del('web/js');
     gulp.src('_assets/js/**/*.js')
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(concat('scripts.js'))
@@ -66,10 +69,10 @@ gulp.task('scripts', function() {
 *
 **/
 gulp.task('images', function () {
+    del('web/img');
     gulp.src('_assets/img/**/*')
         .pipe(imagemin({
             progressive: true,
-            svgoPlugins: [{removeViewBox: false}],
             use: [pngquant()]
         }))
         .pipe(gulp.dest('web/img'));
