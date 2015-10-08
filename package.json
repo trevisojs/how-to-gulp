@@ -4,15 +4,15 @@
   "description": "Questo è un repository per capire e testare le funzionalità di Gulp",
   "main": "gulpfile.js",
   "devDependencies": {
-    "gulp": "3.9.0",
     "browser-sync": "2.7.1",
+    "gulp": "3.9.0",
     "gulp-autoprefixer": "1.0.0",
     "gulp-concat": "2.5.2",
-    "gulp-sass": "0.7.3",
-    "gulp-uglify": "1.2.0",
-    "gulp-cssmin": "^0.1.7",
     "gulp-notify": "^2.2.0",
-    "gulp-plumber": "^1.0.1"
+    "gulp-plumber": "^1.0.1",
+    "gulp-sass": "0.7.3",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "1.2.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

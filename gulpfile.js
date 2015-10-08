@@ -10,8 +10,8 @@ Author: @nicholasruggeri - http://ruggeri.io
 **/
 var gulp        = require('gulp');
 var sass        = require('gulp-sass');
-var cssmin      = require('gulp-cssmin');
 var prefix      = require('gulp-autoprefixer');
+var sourcemaps  = require('gulp-sourcemaps');
 var concat      = require('gulp-concat');
 var uglify      = require('gulp-uglify');
 var plumber     = require('gulp-plumber');
@@ -23,17 +23,17 @@ var browserSync = require('browser-sync').create();
 *
 * Styles
 * - Catch errors (gulp-plumber)
-* - Compile
+* - Compile with 'compressed' output
 * - Autoprefixer
-* - Minify
 *
 **/
 gulp.task('styles', function() {
   gulp.src('_assets/scss/*.scss')
     .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
-    .pipe(sass())
+    .pipe(sourcemaps.init())
+    .pipe(sass({outputStyle: 'compressed'}))
     .pipe(prefix())
-    .pipe(cssmin())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('web/css'))
     .pipe(browserSync.stream());
 });
