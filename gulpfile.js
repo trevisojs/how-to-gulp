@@ -12,6 +12,7 @@ var gulp        = require('gulp');
 var sass        = require('gulp-sass');
 var prefix      = require('gulp-autoprefixer');
 var sourcemaps  = require('gulp-sourcemaps');
+var htmlmin     = require('gulp-htmlmin');
 var concat      = require('gulp-concat');
 var uglify      = require('gulp-uglify');
 var plumber     = require('gulp-plumber');
@@ -81,12 +82,28 @@ gulp.task('images', function () {
 
 /**
 *
+* Copy:html
+* - copy html
+* - minify html
+*
+**/
+gulp.task('copy:html', function() {
+    del('web/**/*.html');
+    gulp.src('_views/**/*.html')
+        .pipe(htmlmin({collapseWhitespace: true}))
+        .pipe(gulp.dest('web'))
+});
+
+
+/**
+*
 * Watch assets
 * - styles
 * - scripts
 *
 **/
 gulp.task('watch', function() {
+    gulp.watch('_views/**/*.html', ['copy:html']);
     gulp.watch('_assets/scss/**/*.scss', ['styles']);
     gulp.watch('_assets/js/**/*.js', ['scripts']);
     gulp.watch('_assets/img/**/*', ['images']);
@@ -100,7 +117,7 @@ gulp.task('watch', function() {
 * - scripts
 *
 **/
-gulp.task('build', ['styles', 'scripts', 'images'], function() {
+gulp.task('build', ['copy:html', 'styles', 'scripts', 'images'], function() {
     console.log('build assets')
 });
 
@@ -116,6 +133,7 @@ gulp.task('serve', ['build'], function() {
     browserSync.init({
         server: "./web"
     });
+    gulp.watch('_views/**/*.html', ['copy:html']);
     gulp.watch('_assets/scss/**/*.scss', ['styles']);
     gulp.watch('_assets/js/**/*.js', ['scripts']);
     gulp.watch('_assets/img/**/*', ['images']);
