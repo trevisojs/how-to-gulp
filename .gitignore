@@ -1,6 +1,4 @@
 node_modules
 npm-debug.log
-web/css
-web/js
-web/img
+web
 .DS_Store
