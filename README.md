@@ -14,6 +14,7 @@ Questo starter kit utilizza i seguenti task:
 * `images` – Ottimizziamo immagini con imagemin.
 * `build` – Lanciamo 'styles' e 'scripts' contemporaneamente.
 * `watch` – Lanciamo 'styles' e 'scripts' quando ci sono modifiche ai file.
+* 'copy:html' - Usiamo questo task per prendere i file html da _views e portarli minificati in web.
 * `serve` – Usiamo browsersync per creare un server locale e per aggiornare il browser ad ogni modifica sui file.
 * `default` – lanciando semplicemente 'gulp' dal terminale, è come se si lanciasse il task 'serve'
 
