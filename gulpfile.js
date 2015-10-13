@@ -32,7 +32,7 @@ var browserSync = require('browser-sync').create();
 *
 **/
 gulp.task('styles', function() {
-    del('web/css');
+    del.sync('web/css');
     gulp.src('_assets/scss/*.scss')
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(sourcemaps.init())
@@ -53,7 +53,7 @@ gulp.task('styles', function() {
 *
 **/
 gulp.task('scripts', function() {
-    del('web/js');
+    del.sync('web/js');
     gulp.src('_assets/js/**/*.js')
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(concat('scripts.js'))
@@ -70,7 +70,7 @@ gulp.task('scripts', function() {
 *
 **/
 gulp.task('images', function () {
-    del('web/img');
+    del.sync('web/img');
     gulp.src('_assets/img/**/*')
         .pipe(imagemin({
             progressive: true,
@@ -88,7 +88,7 @@ gulp.task('images', function () {
 *
 **/
 gulp.task('copy:html', function() {
-    del('web/**/*.html');
+    del.sync('web/**/*.html');
     gulp.src('_views/**/*.html')
         .pipe(htmlmin({collapseWhitespace: true}))
         .pipe(gulp.dest('web'))
