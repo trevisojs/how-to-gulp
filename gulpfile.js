@@ -8,26 +8,30 @@ Author: @nicholasruggeri - http://ruggeri.io
 /**
 * List gulp dependencies
 **/
-var gulp        = require('gulp');
-var sass        = require('gulp-sass');
-var prefix      = require('gulp-autoprefixer');
-var sourcemaps  = require('gulp-sourcemaps');
-var htmlmin     = require('gulp-htmlmin');
-var concat      = require('gulp-concat');
-var uglify      = require('gulp-uglify');
-var plumber     = require('gulp-plumber');
-var notify      = require("gulp-notify");
-var imagemin    = require('gulp-imagemin');
-var pngquant    = require('imagemin-pngquant');
-var del         = require('del');
-var browserSync = require('browser-sync').create();
+var gulp        = require('gulp'),
+    sass        = require('gulp-sass'),
+    prefix      = require('gulp-autoprefixer'),
+    sourcemaps  = require('gulp-sourcemaps'),
+    htmlmin     = require('gulp-htmlmin'),
+    concat      = require('gulp-concat'),
+    uglify      = require('gulp-uglify'),
+    plumber     = require('gulp-plumber'),
+    notify      = require("gulp-notify"),
+    imagemin    = require('gulp-imagemin'),
+    pngquant    = require('imagemin-pngquant'),
+    del         = require('del'),
+    gulpif      = require('gulp-if'),
+    browserSync = require('browser-sync').create();
+
+
+var prod = false; // var for production mode
 
 
 /**
 *
 * Styles
 * - Catch errors (gulp-plumber)
-* - Compile with 'compressed' output
+* - Compile with 'compressed' output if prod
 * - Autoprefixer
 *
 **/
@@ -36,7 +40,7 @@ gulp.task('styles', function() {
     gulp.src('_assets/scss/*.scss')
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(sourcemaps.init())
-        .pipe(sass({outputStyle: 'compressed'}))
+        .pipe(sass({outputStyle: prod ? 'compressed' : 'expanded'}))
         .pipe(prefix())
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('web/css'))
@@ -49,7 +53,7 @@ gulp.task('styles', function() {
 * Scripts
 * - Catch errors (gulp-plumber)
 * - Concat
-* - Uglify
+* - Uglify if prod
 *
 **/
 gulp.task('scripts', function() {
@@ -57,7 +61,7 @@ gulp.task('scripts', function() {
     gulp.src('_assets/js/**/*.js')
         .pipe(plumber({errorHandler: notify.onError("Error: <%= error.message %>")}))
         .pipe(concat('scripts.js'))
-        .pipe(uglify())
+        .pipe(gulpif(prod, uglify()))
         .pipe(gulp.dest('web/js'))
         .pipe(browserSync.stream());
 });
@@ -66,31 +70,31 @@ gulp.task('scripts', function() {
 /**
 *
 * Images
-* - Image optimization
+* - Image optimization if prod
 *
 **/
 gulp.task('images', function () {
     del.sync('web/img');
     gulp.src('_assets/img/**/*')
-        .pipe(imagemin({
+        .pipe(gulpif(prod, imagemin({
             progressive: true,
             use: [pngquant()]
-        }))
+        })))
         .pipe(gulp.dest('web/img'));
 });
 
 
 /**
 *
-* Copy:html
+* Html
 * - copy html
-* - minify html
+* - minify html if prod
 *
 **/
-gulp.task('copy:html', function() {
+gulp.task('html', function() {
     del.sync('web/**/*.html');
     gulp.src('_views/**/*.html')
-        .pipe(htmlmin({collapseWhitespace: true}))
+        .pipe(gulpif(prod, htmlmin({collapseWhitespace: true})))
         .pipe(gulp.dest('web'))
 });
 
@@ -98,12 +102,10 @@ gulp.task('copy:html', function() {
 /**
 *
 * Watch assets
-* - styles
-* - scripts
 *
 **/
 gulp.task('watch', function() {
-    gulp.watch('_views/**/*.html', ['copy:html']);
+    gulp.watch('_views/**/*.html', ['html']);
     gulp.watch('_assets/scss/**/*.scss', ['styles']);
     gulp.watch('_assets/js/**/*.js', ['scripts']);
     gulp.watch('_assets/img/**/*', ['images']);
@@ -112,20 +114,18 @@ gulp.task('watch', function() {
 
 /**
 *
-* Build assets
-* - styles
-* - scripts
+* Build task
 *
 **/
-gulp.task('build', ['copy:html', 'styles', 'scripts', 'images'], function() {
-    console.log('build assets')
+gulp.task('build', function() {
+    gulp.start('html', 'styles', 'scripts', 'images');
 });
 
 
 /**
 *
 * Serve - BrowserSync.io
-* - Watch CSS, JS & HTML for changes
+* - Watch CSS, JS, IMG & HTML for changes
 * - View project at: localhost:3000
 *
 **/
@@ -133,13 +133,22 @@ gulp.task('serve', ['build'], function() {
     browserSync.init({
         server: "./web"
     });
-    gulp.watch('_views/**/*.html', ['copy:html']);
+    gulp.watch('_views/**/*.html', ['html']);
     gulp.watch('_assets/scss/**/*.scss', ['styles']);
     gulp.watch('_assets/js/**/*.js', ['scripts']);
     gulp.watch('_assets/img/**/*', ['images']);
     gulp.watch("web/*.html").on('change', browserSync.reload);
 });
 
+
+/**
+* Gulp Prod
+* - build all the assets in production env
+*/
+gulp.task('prod', function(){
+    prod = true;
+    gulp.start('build');
+});
 
 /**
 *
